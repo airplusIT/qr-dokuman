@@ -1,0 +1,36 @@
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>PDF Görüntüleyici</title>
+    <script>
+        function getQueryParam(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
+
+        function redirectToPDF(role) {
+            const id = getQueryParam("id");
+            if (!id) {
+                alert("Geçerli bir ID parametresi bulunamadı.");
+                return;
+            }
+
+            let path = "";
+            if (role === "musteri") {
+                path = `docs/musteri/${id}.pdf`;
+            } else if (role === "personel") {
+                path = `docs/personel/${id}.pdf`;
+            }
+
+            window.location.href = path;
+        }
+    </script>
+</head>
+<body>
+    <h2>Lütfen giriş türünüzü seçin:</h2>
+    <button onclick="redirectToPDF('musteri')">Müşteri Girişi</button>
+    <button onclick="redirectToPDF('personel')">Personel Girişi</button>
+</body>
+</html>
