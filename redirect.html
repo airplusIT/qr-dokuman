@@ -1,0 +1,36 @@
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Yönlendiriliyor...</title>
+    <script>
+        async function redirect() {
+            const params = new URLSearchParams(window.location.search);
+            const id = params.get("id");
+            if (!id) {
+                document.body.innerHTML = "<p>ID parametresi eksik.</p>";
+                return;
+            }
+
+            try {
+                const response = await fetch("redirects.json");
+                const mapping = await response.json();
+                const target = mapping[id];
+                if (target) {
+                    window.location.href = target;
+                } else {
+                    document.body.innerHTML = "<p>Belirtilen ID için dosya bulunamadı.</p>";
+                }
+            } catch (error) {
+                document.body.innerHTML = "<p>Yönlendirme verisi yüklenemedi.</p>";
+            }
+        }
+
+        window.onload = redirect;
+    </script>
+</head>
+<body>
+    <p>Yönlendiriliyor...</p>
+</body>
+</html>
