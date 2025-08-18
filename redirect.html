@@ -4,10 +4,8 @@
   <meta charset="UTF-8">
   <title>Yönlendirme Sayfası</title>
   <style>
-    body { font-family: Arial, sans-serif; text-align: center; margin-top: 100px; }
+    body { font-family: Arial; text-align: center; margin-top: 100px; }
     #sifreAlani { display: none; margin-top: 20px; }
-    button { margin: 10px; padding: 10px 20px; font-size: 16px; }
-    input { padding: 8px; font-size: 16px; }
   </style>
 </head>
 <body>
@@ -32,16 +30,16 @@
       if (tip === 'personel') {
         document.getElementById('sifreAlani').style.display = 'block';
       } else {
-        window.location.href = `${tip}/${id}.pdf`;
+        window.location.href = `docs/${tip}/${id}.pdf`;
       }
     }
 
     function girisYap() {
       const sifre = document.getElementById('sifre').value;
       if (sifre === '1234') {
-        window.location.href = `personel/${id}.pdf`;
+        window.location.href = `docs/personel/${id}.pdf`;
       } else {
-        alert('Şifre yanlış! Lütfen tekrar deneyin.');
+        alert('Şifre yanlış!');
       }
     }
   </script>
