@@ -2,47 +2,48 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8">
-  <title>Yönlendiriliyor...</title>
+  <title>Yönlendirme Sayfası</title>
+  <style>
+    body { font-family: Arial, sans-serif; text-align: center; margin-top: 100px; }
+    #sifreAlani { display: none; margin-top: 20px; }
+    button { margin: 10px; padding: 10px 20px; font-size: 16px; }
+    input { padding: 8px; font-size: 16px; }
+  </style>
+</head>
+<body>
+  <h1>Hoş Geldiniz</h1>
+  <p>Lütfen giriş türünüzü seçin:</p>
+  <button onclick="girisSec('musteri')">Müşteri Girişi</button>
+  <button onclick="girisSec('personel')">Personel Girişi</button>
+
+  <div id="sifreAlani">
+    <p>Personel şifrenizi girin:</p>
+    <input type="password" id="sifre" />
+    <button onclick="girisYap()">Giriş Yap</button>
+  </div>
+
   <script>
-    async function redirectUser() {
-      const params = new URLSearchParams(window.location.search);
-      const id = params.get("id");
-      const role = localStorage.getItem("role"); // "musteri" veya "personel"
+    let secim = '';
+    const urlParams = new URLSearchParams(window.location.search);
+    const id = urlParams.get('id');
 
-      if (!id || !role) {
-        alert("Geçersiz istek veya kullanıcı rolü tanımlı değil.");
-        return;
-      }
-
-      try {
-        const response = await fetch("redirects 1.json");
-        const text = await response.text();
-        const lines = text.trim().split("\n");
-
-        const match = lines.find(line => line.startsWith(id + " "));
-        if (!match) {
-          alert("Belge bulunamadı.");
-          return;
-        }
-
-        const filePath = match.split(" ")[1];
-
-        if (filePath.startsWith("docs/" + role)) {
-          // Erişim izni var, yönlendir
-          window.location.href = `viewer.html?file=${encodeURIComponent(filePath)}`;
-        } else {
-          alert("Seçilen rol bu dosyaya erişemez.");
-        }
-      } catch (error) {
-        console.error("Yönlendirme hatası:", error);
-        alert("Bir hata oluştu.");
+    function girisSec(tip) {
+      secim = tip;
+      if (tip === 'personel') {
+        document.getElementById('sifreAlani').style.display = 'block';
+      } else {
+        window.location.href = `${tip}/${id}.pdf`;
       }
     }
 
-    window.onload = redirectUser;
+    function girisYap() {
+      const sifre = document.getElementById('sifre').value;
+      if (sifre === '1234') {
+        window.location.href = `personel/${id}.pdf`;
+      } else {
+        alert('Şifre yanlış! Lütfen tekrar deneyin.');
+      }
+    }
   </script>
-</head>
-<body>
-  <p>Yönlendiriliyorsunuz, lütfen bekleyin...</p>
 </body>
 </html>
