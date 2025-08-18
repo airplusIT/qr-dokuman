@@ -25,19 +25,47 @@
     const urlParams = new URLSearchParams(window.location.search);
     const id = urlParams.get('id');
 
+    // Desteklenen uzantılar
+    const extensions = ['pdf', 'jpg', 'docx'];
+
+    // Dosya var mı kontrolü için uzantıları sırayla dene
+    function getDosyaYolu(tip) {
+      for (let ext of extensions) {
+        let yol = `docs/${tip}/${id}.${ext}`;
+        // Sayfa var mı kontrolü için HEAD isteği
+        let xhr = new XMLHttpRequest();
+        xhr.open('HEAD', yol, false);
+        xhr.send();
+        if (xhr.status === 200) {
+          return yol;
+        }
+      }
+      return null;
+    }
+
     function girisSec(tip) {
       secim = tip;
       if (tip === 'personel') {
         document.getElementById('sifreAlani').style.display = 'block';
       } else {
-        window.location.href = `docs/${tip}/${id}.pdf`;
+        let dosyaYolu = getDosyaYolu(tip);
+        if (dosyaYolu) {
+          window.location.href = dosyaYolu;
+        } else {
+          alert('Dosya bulunamadı!');
+        }
       }
     }
 
     function girisYap() {
       const sifre = document.getElementById('sifre').value;
       if (sifre === '1234') {
-        window.location.href = `docs/personel/${id}.pdf`;
+        let dosyaYolu = getDosyaYolu('personel');
+        if (dosyaYolu) {
+          window.location.href = dosyaYolu;
+        } else {
+          alert('Dosya bulunamadı!');
+        }
       } else {
         alert('Şifre yanlış!');
       }
