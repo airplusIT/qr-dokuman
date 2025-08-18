@@ -1,26 +1,47 @@
 <!DOCTYPE html>
+
 <html lang="tr">
 <head>
-  <meta charset="UTF-8">
-  <title>Yönlendirme Sayfası</title>
-  <style>
+<meta charset="utf-8"/>
+<title>Yönlendirme Sayfası</title>
+<style>
     body { font-family: Arial; text-align: center; margin-top: 100px; }
     #sifreAlani { display: none; margin-top: 20px; }
   </style>
-</head>
-<body>
-  <h1>Hoş Geldiniz</h1>
-  <p>Lütfen giriş türünüzü seçin:</p>
-  <button onclick="girisSec('musteri')">Müşteri Girişi</button>
-  <button onclick="girisSec('personel')">Personel Girişi</button>
-
-  <div id="sifreAlani">
-    <p>Personel şifrenizi girin:</p>
-    <input type="password" id="sifre" />
-    <button onclick="girisYap()">Giriş Yap</button>
-  </div>
-
-  <script>
+<style>
+body {
+    margin: 0;
+    padding: 0;
+    background-image: url('docs/UploadedImage1.jpg');
+    background-size: cover;
+    background-position: center;
+    font-family: Arial, sans-serif;
+    color: white;
+    text-align: center;
+}
+.logo {
+    margin-top: 30px;
+}
+.container {
+    background-color: rgba(0, 0, 0, 0.5);
+    margin: 50px auto;
+    padding: 20px;
+    width: 80%;
+    max-width: 600px;
+    border-radius: 10px;
+}
+</style></head>
+<body><img alt="Logo" class="logo" src="docs/UploadedImage0.jpg" width="150"/>
+<h1>Hoş Geldiniz</h1>
+<p>Lütfen giriş türünüzü seçin:</p>
+<button onclick="girisSec('musteri')">Müşteri Girişi</button>
+<button onclick="girisSec('personel')">Personel Girişi</button>
+<div id="sifreAlani">
+<p>Personel şifrenizi girin:</p>
+<input id="sifre" type="password"/>
+<button onclick="girisYap()">Giriş Yap</button>
+</div>
+<script>
     let secim = '';
     const urlParams = new URLSearchParams(window.location.search);
     const id = urlParams.get('id');
@@ -76,5 +97,5 @@
       })(0);
     }
   </script>
-</body>
+<div class="container"><h1>Hoş Geldiniz</h1><p>Lütfen giriş yapmak için aşağıdaki seçeneklerden birini kullanın.</p></div></body>
 </html>
