@@ -5,9 +5,66 @@
 <meta charset="utf-8"/>
 <title>Yönlendirme Sayfası</title>
 <style>
-    body { font-family: Arial; text-align: center; margin-top: 100px; }
-    #sifreAlani { display: none; margin-top: 20px; }
-  </style>
+body {
+    margin: 0;
+    padding: 0;
+    background-image: url('docs/UploadedImage1.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    font-family: Arial, sans-serif;
+    color: white;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.container {
+    background-color: rgba(0, 0, 0, 0.6);
+    padding: 40px;
+    border-radius: 15px;
+    text-align: center;
+    max-width: 90%;
+    width: 400px;
+}
+.container img {
+    max-width: 150px;
+    height: auto;
+    margin-bottom: 20px;
+}
+.container h1 {
+    font-size: 2em;
+    margin-bottom: 20px;
+}
+.container button {
+    display: block;
+    width: 100%;
+    padding: 15px;
+    margin: 10px 0;
+    font-size: 1.2em;
+    border: none;
+    border-radius: 8px;
+    background-color: #007BFF;
+    color: white;
+    cursor: pointer;
+}
+.container button:hover {
+    background-color: #0056b3;
+}
+@media (max-width: 600px) {
+    .container {
+        width: 90%;
+        padding: 30px;
+    }
+    .container h1 {
+        font-size: 1.5em;
+    }
+    .container button {
+        font-size: 1em;
+        padding: 12px;
+    }
+}
+</style>
 </head>
 <body>
 <h1>Hoş Geldiniz</h1>
