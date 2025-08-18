@@ -130,63 +130,25 @@ input[type="password"] {
     border-radius: 5px;
     border: none;
 }
-</style><style>
-body {
-    margin: 0;
-    padding: 0;
-    background-image: url('docs/UploadedImage1.jpg');
-    background-size: cover;
-    background-position: center;
-    font-family: Arial, sans-serif;
-    color: white;
-    text-align: center;
-}
-.container {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 90%;
-    max-width: 500px;
-    background-color: rgba(0, 0, 0, 0.6);
-    padding: 40px;
-    border-radius: 15px;
-}
-.logo {
-    width: 100%;
-    max-width: 300px;
-    margin-bottom: 30px;
-}
-button {
-    display: block;
-    width: 100%;
-    padding: 30px;
-    font-size: 2em;
-    margin: 20px 0;
-    border: none;
-    border-radius: 10px;
-    background-color: #007BFF;
-    color: white;
-    cursor: pointer;
-}
-button:hover {
-    background-color: #0056b3;
-}
-#password-container {
-    display: none;
-    margin-top: 20px;
-}
-input[type="password"] {
-    width: 100%;
-    padding: 20px;
-    font-size: 1.5em;
-    border-radius: 10px;
-    border: none;
-}
 </style></head>
-<body><div class="container"><img alt="Logo" class="logo" src="docs/UploadedImage0.jpg"/><h1>Hoş Geldiniz</h1><button onclick="alert('Müşteri Girişi')">Müşteri Girişi</button><button onclick="showPasswordInput()">Personel Girişi</button><div id="password-container"><input placeholder="Şifreyi girin" type="password"/></div></div><script>
-function showPasswordInput() {
-    document.getElementById('password-container').style.display = 'block';
-}
-</script></body>
+<body><div class="container"><img class="logo" src="docs/UploadedImage0.jpg"/><h1>Hoş Geldiniz</h1><button onclick="if('Müşteri Girişi'==='Personel Girişi'){document.getElementById('password-section').style.display='block';}">Müşteri Girişi</button><button onclick="if('Bayii Girişi'==='Personel Girişi'){document.getElementById('password-section').style.display='block';}">Bayii Girişi</button><button onclick="if('Personel Girişi'==='Personel Girişi'){document.getElementById('password-section').style.display='block';}">Personel Girişi</button><div id="password-section"><input placeholder="Şifreyi giriniz" type="password"/></div></div>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const id = urlParams.get("id");
+
+    document.getElementById("musteriBtn").addEventListener("click", function() {
+        if (id) {
+            window.location.href = `docs/musteri/${id}.pdf`;
+        }
+    });
+
+    document.getElementById("personelBtn").addEventListener("click", function() {
+        if (id) {
+            window.location.href = `docs/personel/${id}.pdf`;
+        }
+    });
+});
+</script>
+</body>
 </html>
