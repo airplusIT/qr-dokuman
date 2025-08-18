@@ -1,63 +1,86 @@
-
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-    <meta charset="UTF-8">
-    <title>Giriş Ekranı</title>
-    <script>
-        async function handleLogin() {
-            const id = new URLSearchParams(window.location.search).get('id');
-            const role = document.querySelector('input[name="role"]:checked');
-            const passwordInput = document.getElementById('password');
-            const password = passwordInput.value;
-
-            if (!role) {
-                alert("Lütfen bir rol seçin.");
-                return;
-            }
-
-            if (role.value === "personel" && password !== "1234") {
-                alert("Şifre yanlış!");
-                return;
-            }
-
-            try {
-                const response = await fetch("redirects.json");
-                const redirects = await response.json();
-                const target = redirects[id];
-
-                if (target) {
-                    window.location.href = target;
-                } else {
-                    alert("Belirtilen ID için dosya bulunamadı.");
-                }
-            } catch (error) {
-                alert("redirects.json dosyası yüklenemedi.");
-            }
-        }
-
-        function togglePasswordField() {
-            const role = document.querySelector('input[name="role"]:checked');
-            const passwordSection = document.getElementById('passwordSection');
-            if (role && role.value === "personel") {
-                passwordSection.style.display = "block";
-            } else {
-                passwordSection.style.display = "none";
-            }
-        }
-    </script>
+  <meta charset="UTF-8">
+  <title>Giriş Ekranı</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    .hidden { display: none; }
+    label { display: block; margin-top: 10px; }
+    select, input[type="password"], button { margin-top: 5px; }
+  </style>
 </head>
 <body>
-    <h2>Giriş Yap</h2>
-    <form onsubmit="event.preventDefault(); handleLogin();">
-        <label><input type="radio" name="role" value="musteri" onclick="togglePasswordField()"> Müşteri</label><br>
-        <label><input type="radio" name="role" value="personel" onclick="togglePasswordField()"> Personel</label><br><br>
+  <h2>Giriş Yap</h2>
+  <form id="loginForm">
+    <label for="role">Rol Seçin:</label>
+    <select id="role" name="role" required>
+      <option value="">-- Seçin --</option>
+      <option value="musteri">Müşteri</option>
+      <option value="personel">Personel</option>
+    </select>
 
-        <div id="passwordSection" style="display:none;">
-            <label>Şifre: <input type="password" id="password"></label><br><br>
-        </div>
+    <div id="passwordDiv" class="hidden">
+      <label for="password">Şifre:</label>
+      <input type="password" id="password" name="password">
+    </div>
 
-        <button type="submit">Giriş</button>
-    </form>
+    <button type="submit">Giriş</button>
+  </form>
+
+  <p id="message" style="color: red;"></p>
+
+  <script>
+    const roleSelect = document.getElementById('role');
+    const passwordDiv = document.getElementById('passwordDiv');
+    const passwordInput = document.getElementById('password');
+    const message = document.getElementById('message');
+
+    roleSelect.addEventListener('change', function() {
+      if (this.value === 'personel') {
+        passwordDiv.classList.remove('hidden');
+      } else {
+        passwordDiv.classList.add('hidden');
+        passwordInput.value = '';
+      }
+    });
+
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const params = new URLSearchParams(window.location.search);
+      const id = params.get('id');
+      const role = roleSelect.value;
+
+      if (!id || !role) {
+        message.textContent = "Lütfen rol seçin.";
+        return;
+      }
+
+      if (role === 'personel' && passwordInput.value !== '1234') {
+        message.textContent = "Şifre yanlış.";
+        return;
+      }
+
+      fetch('redirects.json')
+        .then(response => response.json())
+        .then(data => {
+          const filePath = data[id];
+          if (!filePath) {
+            message.textContent = "Belirtilen ID için dosya bulunamadı.";
+            return;
+          }
+
+          if (!filePath.includes(`docs/${role}/`)) {
+            message.textContent = "Seçilen rol bu dosyaya erişemez.";
+            return;
+          }
+
+          window.location.href = filePath;
+        })
+        .catch(error => {
+          message.textContent = "Yönlendirme verisi yüklenemedi.";
+        });
+    });
+  </script>
 </body>
 </html>
