@@ -2,104 +2,62 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8">
-  <title>Giriş Ekranı</title>
-  <style>
-    body {
-      display: flex;
-      height: 100vh;
-      justify-content: center;
-      align-items: center;
-      font-family: Arial, sans-serif;
-    }
-    .container {
-      text-align: center;
-      border: 1px solid #ccc;
-      padding: 30px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-    .hidden {
-      display: none;
-    }
-    .error {
-      color: red;
-      margin-top: 10px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <title>Giriş Ekranı</title>
+    <script>
+        async function handleLogin() {
+            const id = new URLSearchParams(window.location.search).get('id');
+            const role = document.querySelector('input[name="role"]:checked');
+            const passwordInput = document.getElementById('password');
+            const password = passwordInput.value;
+
+            if (!role) {
+                alert("Lütfen bir rol seçin.");
+                return;
+            }
+
+            if (role.value === "personel" && password !== "1234") {
+                alert("Şifre yanlış!");
+                return;
+            }
+
+            try {
+                const response = await fetch("redirects.json");
+                const redirects = await response.json();
+                const target = redirects[id];
+
+                if (target) {
+                    window.location.href = target;
+                } else {
+                    alert("Belirtilen ID için dosya bulunamadı.");
+                }
+            } catch (error) {
+                alert("redirects.json dosyası yüklenemedi.");
+            }
+        }
+
+        function togglePasswordField() {
+            const role = document.querySelector('input[name="role"]:checked');
+            const passwordSection = document.getElementById('passwordSection');
+            if (role && role.value === "personel") {
+                passwordSection.style.display = "block";
+            } else {
+                passwordSection.style.display = "none";
+            }
+        }
+    </script>
 </head>
 <body>
-  <div class="container">
     <h2>Giriş Yap</h2>
-    <form id="loginForm">
-      <div>
-        <label><input type="radio" name="role" value="musteri" checked> Müşteri</label>
-        <label><input type="radio" name="role" value="personel"> Personel</label>
-      </div>
-      <div id="passwordDiv" class="hidden">
-        <input type="password" id="password" placeholder="Şifre">
-      </div>
-      <br>
-      <button type="submit">Giriş</button>
-      <div id="errorMessage" class="error"></div>
+    <form onsubmit="event.preventDefault(); handleLogin();">
+        <label><input type="radio" name="role" value="musteri" onclick="togglePasswordField()"> Müşteri</label><br>
+        <label><input type="radio" name="role" value="personel" onclick="togglePasswordField()"> Personel</label><br><br>
+
+        <div id="passwordSection" style="display:none;">
+            <label>Şifre: <input type="password" id="password"></label><br><br>
+        </div>
+
+        <button type="submit">Giriş</button>
     </form>
-  </div>
-
-  <script>
-    const urlParams = new URLSearchParams(window.location.search);
-    const id = urlParams.get('id');
-
-    const redirectsUrl = 'redirects.json';
-    const loginForm = document.getElementById('loginForm');
-    const passwordDiv = document.getElementById('passwordDiv');
-    const errorMessage = document.getElementById('errorMessage');
-
-    document.querySelectorAll('input[name="role"]').forEach(radio => {
-      radio.addEventListener('change', () => {
-        if (radio.value === 'personel' && radio.checked) {
-          passwordDiv.classList.remove('hidden');
-        } else {
-          passwordDiv.classList.add('hidden');
-        }
-        errorMessage.textContent = '';
-      });
-    });
-
-    loginForm.addEventListener('submit', function(e) {
-      e.preventDefault();
-      const role = document.querySelector('input[name="role"]:checked').value;
-      const password = document.getElementById('password').value;
-
-      if (role === 'personel' && password !== '1234') {
-        errorMessage.textContent = 'Şifre yanlış!';
-        return;
-      }
-
-      fetch(redirectsUrl)
-        .then(response => response.json())
-        .then(data => {
-          const path = data[id];
-          if (!path) {
-            errorMessage.textContent = 'Belirtilen dosya bulunamadı.';
-            return;
-          }
-
-          if (role === 'personel' && !path.includes('docs/personel/')) {
-            errorMessage.textContent = 'Seçilen rol bu dosyaya erişemez.';
-            return;
-          }
-
-          if (role === 'musteri' && !path.includes('docs/musteri/')) {
-            errorMessage.textContent = 'Seçilen rol bu dosyaya erişemez.';
-            return;
-          }
-
-          window.location.href = path;
-        })
-        .catch(() => {
-          errorMessage.textContent = 'Yönlendirme verisi alınamadı.';
-        });
-    });
-  </script>
 </body>
 </html>
