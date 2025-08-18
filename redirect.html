@@ -1,84 +1,103 @@
+
 <!DOCTYPE html>
 <html lang="tr">
 <head>
   <meta charset="UTF-8">
   <title>Giriş Ekranı</title>
   <style>
-    body { font-family: Arial, sans-serif; padding: 20px; }
-    .hidden { display: none; }
-    label { display: block; margin-top: 10px; }
-    select, input[type="password"], button { margin-top: 5px; }
+    body {
+      display: flex;
+      height: 100vh;
+      justify-content: center;
+      align-items: center;
+      font-family: Arial, sans-serif;
+    }
+    .container {
+      text-align: center;
+      border: 1px solid #ccc;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .hidden {
+      display: none;
+    }
+    .error {
+      color: red;
+      margin-top: 10px;
+    }
   </style>
 </head>
 <body>
-  <h2>Giriş Yap</h2>
-  <form id="loginForm">
-    <label for="role">Rol Seçin:</label>
-    <select id="role" name="role" required>
-      <option value="">-- Seçin --</option>
-      <option value="musteri">Müşteri</option>
-      <option value="personel">Personel</option>
-    </select>
-
-    <div id="passwordDiv" class="hidden">
-      <label for="password">Şifre:</label>
-      <input type="password" id="password" name="password">
-    </div>
-
-    <button type="submit">Giriş</button>
-  </form>
-
-  <p id="message" style="color: red;"></p>
+  <div class="container">
+    <h2>Giriş Yap</h2>
+    <form id="loginForm">
+      <div>
+        <label><input type="radio" name="role" value="musteri" checked> Müşteri</label>
+        <label><input type="radio" name="role" value="personel"> Personel</label>
+      </div>
+      <div id="passwordDiv" class="hidden">
+        <input type="password" id="password" placeholder="Şifre">
+      </div>
+      <br>
+      <button type="submit">Giriş</button>
+      <div id="errorMessage" class="error"></div>
+    </form>
+  </div>
 
   <script>
-    const roleSelect = document.getElementById('role');
-    const passwordDiv = document.getElementById('passwordDiv');
-    const passwordInput = document.getElementById('password');
-    const message = document.getElementById('message');
+    const urlParams = new URLSearchParams(window.location.search);
+    const id = urlParams.get('id');
 
-    roleSelect.addEventListener('change', function() {
-      if (this.value === 'personel') {
-        passwordDiv.classList.remove('hidden');
-      } else {
-        passwordDiv.classList.add('hidden');
-        passwordInput.value = '';
-      }
+    const redirectsUrl = 'redirects.json';
+    const loginForm = document.getElementById('loginForm');
+    const passwordDiv = document.getElementById('passwordDiv');
+    const errorMessage = document.getElementById('errorMessage');
+
+    document.querySelectorAll('input[name="role"]').forEach(radio => {
+      radio.addEventListener('change', () => {
+        if (radio.value === 'personel' && radio.checked) {
+          passwordDiv.classList.remove('hidden');
+        } else {
+          passwordDiv.classList.add('hidden');
+        }
+        errorMessage.textContent = '';
+      });
     });
 
-    document.getElementById('loginForm').addEventListener('submit', function(e) {
+    loginForm.addEventListener('submit', function(e) {
       e.preventDefault();
-      const params = new URLSearchParams(window.location.search);
-      const id = params.get('id');
-      const role = roleSelect.value;
+      const role = document.querySelector('input[name="role"]:checked').value;
+      const password = document.getElementById('password').value;
 
-      if (!id || !role) {
-        message.textContent = "Lütfen rol seçin.";
+      if (role === 'personel' && password !== '1234') {
+        errorMessage.textContent = 'Şifre yanlış!';
         return;
       }
 
-      if (role === 'personel' && passwordInput.value !== '1234') {
-        message.textContent = "Şifre yanlış.";
-        return;
-      }
-
-      fetch('redirects.json')
+      fetch(redirectsUrl)
         .then(response => response.json())
         .then(data => {
-          const filePath = data[id];
-          if (!filePath) {
-            message.textContent = "Belirtilen ID için dosya bulunamadı.";
+          const path = data[id];
+          if (!path) {
+            errorMessage.textContent = 'Belirtilen dosya bulunamadı.';
             return;
           }
 
-          if (!filePath.includes(`docs/${role}/`)) {
-            message.textContent = "Seçilen rol bu dosyaya erişemez.";
+          if (role === 'personel' && !path.includes('docs/personel/')) {
+            errorMessage.textContent = 'Seçilen rol bu dosyaya erişemez.';
             return;
           }
 
-          window.location.href = filePath;
+          if (role === 'musteri' && !path.includes('docs/musteri/')) {
+            errorMessage.textContent = 'Seçilen rol bu dosyaya erişemez.';
+            return;
+          }
+
+          window.location.href = path;
         })
-        .catch(error => {
-          message.textContent = "Yönlendirme verisi yüklenemedi.";
+        .catch(() => {
+          errorMessage.textContent = 'Yönlendirme verisi alınamadı.';
         });
     });
   </script>
