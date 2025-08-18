@@ -6,7 +6,10 @@
 <title>Yönlendirme Sayfası</title>
 <style>
     body { font-family: Arial; text-align: center; margin-top: 200px; }
-    #sifreAlani { display: none; margin-top: 20px; }
+    #sifreAlani { display: none; margin-top: 100px; }
+
+
+
   </style>
 <style>
 body {
@@ -35,12 +38,12 @@ body {
 <body><img alt="Logo" class="logo" src="docs/UploadedImage0.jpg" width="150"/>
 <h1>Hoş Geldiniz</h1>
 <p>Lütfen giriş türünüzü seçin:</p>
-<button onclick="girisSec('musteri')">Müşteri Girişi</button>
-<button onclick="girisSec('personel')">Personel Girişi</button>
+<button onclick="girisSec('musteri')" style="width: 400px; height: 120px">Müşteri Girişi</button>
+<button onclick="girisSec('personel')" style="width: 400px; height: 120px">Personel Girişi</button>
 <div id="sifreAlani">
 <p>Personel şifrenizi girin:</p>
-<input id="sifre" type="password"/>
-<button onclick="girisYap()">Giriş Yap</button>
+<input id="sifre" type="password" style="width: 600px; height: 120px;">
+<button onclick="girisYap()" style="width: 400px; height: 120px">Giriş Yap</button>
 </div>
 <script>
     let secim = '';
@@ -98,5 +101,5 @@ body {
       })(0);
     }
   </script>
-<div class="container"><h1>Hoş Geldiniz</h1><p>Lütfen giriş yapmak için aşağıdaki seçeneklerden birini kullanın.</p></div></body>
+</body>
 </html>
