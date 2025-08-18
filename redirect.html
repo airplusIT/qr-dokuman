@@ -5,7 +5,7 @@
 <meta charset="utf-8"/>
 <title>Yönlendirme Sayfası</title>
 <style>
-    body { font-family: Arial; text-align: center; margin-top: 100px; }
+    body { font-family: Arial; text-align: center; margin-top: 200px; }
     #sifreAlani { display: none; margin-top: 20px; }
   </style>
 <style>
@@ -18,61 +18,85 @@ body {
     background-repeat: no-repeat;
     font-family: Arial, sans-serif;
     color: white;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.container {
     text-align: center;
-    background-color: rgba(0, 0, 0, 0.6);
-    padding: 30px;
-    border-radius: 15px;
-    width: 90%;
-    max-width: 500px;
 }
-
-.container img {
-    width: 150px;
-    height: auto;
-    margin-bottom: 20px;
+.logo {
+    margin-top: 60px;
 }
-
-.container h1 {
-    font-size: 2em;
-    margin-bottom: 20px;
-}
-
-.container button {
-    font-size: 1.2em;
-    padding: 12px 24px;
-    margin: 10px;
-    border: none;
-    border-radius: 8px;
-    background-color: #007BFF;
-    color: white;
-    cursor: pointer;
-}
-
-.container button:hover {
-    background-color: #0056b3;
-}
-
-@media (max-width: 600px) {
-    .container img {
-        width: 200px;
-    }
-
-    .container h1 {
-        font-size: 2.5em;
-    }
-
-    .container button {
-        font-size: 1.5em;
-        padding: 16px 32px;
-    }
+.container {
+    background-color: rgba(0, 0, 0, 0.5);
+    margin: 100px auto;
+    padding: 40px;
+    width: 160%;
+    max-width: 1200px;
+    border-radius: 20px;
 }
 </style></head>
-<body><div class="container"><img alt="Logo" src="docs/UploadedImage0.jpg"/><h1>Hoş Geldiniz</h1><button>Bireysel Giriş</button><button>Kurumsal Giriş</button></div></body>
+<body><img alt="Logo" class="logo" src="docs/UploadedImage0.jpg" width="150"/>
+<h1>Hoş Geldiniz</h1>
+<p>Lütfen giriş türünüzü seçin:</p>
+<button onclick="girisSec('musteri')">Müşteri Girişi</button>
+<button onclick="girisSec('personel')">Personel Girişi</button>
+<div id="sifreAlani">
+<p>Personel şifrenizi girin:</p>
+<input id="sifre" type="password"/>
+<button onclick="girisYap()">Giriş Yap</button>
+</div>
+<script>
+    let secim = '';
+    const urlParams = new URLSearchParams(window.location.search);
+    const id = urlParams.get('id');
+
+    const uzantilar = ['pdf', 'jpg', 'txt', 'docx', 'xlsx', 'xls'];
+
+    function girisSec(tip) {
+      secim = tip;
+      if (tip === 'personel') {
+        document.getElementById('sifreAlani').style.display = 'block';
+      } else {
+        dosyaYukle(tip);
+      }
+    }
+
+    function girisYap() {
+      const sifre = document.getElementById('sifre').value;
+      if (sifre === '1234') {
+        dosyaYukle('personel');
+      } else {
+        alert('Şifre yanlış!');
+      }
+    }
+
+    function dosyaYukle(tip) {
+      const baseUrl = 'https://airplusqr.netlify.app/docs/' + tip + '/';
+      let bulundu = false;
+
+      (function kontrol(index) {
+        if (index >= uzantilar.length) {
+          alert('Dosya bulunamadı!');
+          return;
+        }
+
+        const dosyaAdi = id + '.' + uzantilar[index];
+        const tamUrl = baseUrl + dosyaAdi;
+
+        fetch(tamUrl, { method: 'HEAD' })
+          .then(response => {
+            if (response.ok) {
+              bulundu = true;
+              if (['docx', 'xlsx', 'xls'].includes(uzantilar[index])) {
+                const viewerUrl = 'https://docs.google.com/gview?url=' + tamUrl + '&embedded=true';
+                window.location.href = viewerUrl;
+              } else {
+                window.location.href = tamUrl;
+              }
+            } else {
+              kontrol(index + 1);
+            }
+          })
+          .catch(() => kontrol(index + 1));
+      })(0);
+    }
+  </script>
+<div class="container"><h1>Hoş Geldiniz</h1><p>Lütfen giriş yapmak için aşağıdaki seçeneklerden birini kullanın.</p></div></body>
 </html>
