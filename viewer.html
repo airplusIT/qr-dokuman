@@ -1,36 +1,66 @@
-
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-    <meta charset="UTF-8">
-    <title>PDF Görüntüleyici</title>
-    <script>
-        function getQueryParam(param) {
-            const urlParams = new URLSearchParams(window.location.search);
-            return urlParams.get(param);
-        }
-
-        function redirectToPDF(role) {
-            const id = getQueryParam("id");
-            if (!id) {
-                alert("Geçerli bir ID parametresi bulunamadı.");
-                return;
-            }
-
-            let path = "";
-            if (role === "musteri") {
-                path = `docs/musteri/${id}.pdf`;
-            } else if (role === "personel") {
-                path = `docs/personel/${id}.pdf`;
-            }
-
-            window.location.href = path;
-        }
-    </script>
+  <meta charset="UTF-8">
+  <title>Belge Görüntüleyici - AIRPLUS</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-image: url('UploadedImage1.jpg');
+      background-size: cover;
+      background-position: center;
+      color: white;
+      text-align: center;
+    }
+    header {
+      background-color: rgba(0, 0, 0, 0.6);
+      padding: 20px;
+    }
+    header img {
+      height: 60px;
+    }
+    iframe {
+      width: 80%;
+      height: 80vh;
+      border: none;
+      margin-top: 20px;
+      background-color: white;
+    }
+    .error {
+      margin-top: 50px;
+      font-size: 24px;
+      color: red;
+    }
+  </style>
 </head>
 <body>
-    <h2>Lütfen giriş türünüzü seçin:</h2>
-    <button onclick="redirectToPDF('musteri')">Müşteri Girişi</button>
-    <button onclick="redirectToPDF('personel')">Personel Girişi</button>
+  <header>
+    <img src='UploadedImage0.jpg' alt='AIRPLUS Logo'>
+    <h1>Belge Görüntüleyici</h1>
+  </header>
+  <div id="viewer"></div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const tip = params.get('tip');
+    const id = params.get('id');
+    const ext = params.get('ext');
+
+    const basePath = `docs/${tip}/${id}.${ext}`;
+    const encodedPath = encodeURIComponent(window.location.origin + '/' + basePath);
+
+    let viewerHTML = '';
+
+    if (['pdf', 'jpg', 'jpeg', 'png', 'txt'].includes(ext)) {
+      viewerHTML = `<iframe src="${basePath}"></iframe>`;
+    } else if (['docx', 'xlsx', 'xls'].includes(ext)) {
+      viewerHTML = `<iframe src="https://docs.google.com/gview?url=${encodedPath}&embedded=true"></iframe>`;
+    } else {
+      viewerHTML = `<div class='error'>Dosya türü desteklenmiyor: .${ext}</div>`;
+    }
+
+    document.getElementById('viewer').innerHTML = viewerHTML;
+  </script>
 </body>
 </html>
