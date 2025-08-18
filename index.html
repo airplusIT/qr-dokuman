@@ -1,9 +1,10 @@
 <!DOCTYPE html>
+
 <html lang="tr">
 <head>
-  <meta charset="UTF-8">
-  <title>Giriş Sayfası</title>
-  <style>
+<meta charset="utf-8"/>
+<title>Giriş Sayfası</title>
+<style>
     body {
       font-family: Arial, sans-serif;
       text-align: center;
@@ -24,27 +25,22 @@
     }
   </style>
 </head>
-<body>
-
-  <div id="logo">
-    <img src="UploadedImage0.jpg" alt="AIRPLUS Logo">
-  </div>
-
-  <h1>Hoş Geldiniz</h1>
-  <p>Lütfen giriş türünüzü seçin:</p>
-
-  <button onclick="musteriGiris()">Müşteri Girişi</button>
-  <button onclick="personelGiris()">Personel Girişi</button>
-
-  <div id="personelForm" class="hidden">
-    <p>Personel şifrenizi girin:</p>
-    <input type="password" id="sifre" placeholder="Şifre">
-    <br>
-    <button onclick="dogrula()">Giriş Yap</button>
-    <p id="mesaj" style="color: red;"></p>
-  </div>
-
-  <script>
+<body style="background-image: url('https://cdn.pixabay.com/photo/2023/03/06/15/25/technology-7834247_1280.jpg'); background-size: cover; background-repeat: no-repeat; background-position: center;"><img alt="Airplus Logo" src="UploadedImage0.jpg" style="width:200px; margin:20px; display:block;"/>
+<div id="logo">
+<img alt="AIRPLUS Logo" src="UploadedImage0.jpg"/>
+</div>
+<h1>Hoş Geldiniz</h1>
+<p>Lütfen giriş türünüzü seçin:</p>
+<button onclick="musteriGiris()">Müşteri Girişi</button>
+<button onclick="personelGiris()">Personel Girişi</button>
+<div class="hidden" id="personelForm">
+<p>Personel şifrenizi girin:</p>
+<input id="sifre" placeholder="Şifre" type="password"/>
+<br/>
+<button onclick="dogrula()">Giriş Yap</button>
+<p id="mesaj" style="color: red;"></p>
+</div>
+<script>
     function musteriGiris() {
       window.location.href = "dokuman/musteri.pdf";
     }
@@ -64,6 +60,5 @@
       }
     }
   </script>
-
 </body>
 </html>
