@@ -34,29 +34,12 @@ body {
     max-width: 1200px;
     border-radius: 20px;
 }
-</style>
-<script>
-  const params = new URLSearchParams(window.location.search);
-  const id = params.get("id");
-
-  function yonlendir(tip) {
-    if (id === "10") {
-      if (tip === "musteri") {
-        window.location.href = "https://www.youtube.com/watch?v=y4yNbZ0g7rg";
-      } else if (tip === "personel") {
-        window.location.href = "https://airplus.com.tr/tr";
-      }
-    } else {
-      alert("Geçersiz QR kod ID'si.");
-    }
-  }
-</script>
-</head>
+</style></head>
 <body><img alt="Logo" class="logo" src="docs/UploadedImage0.jpg" width="150"/>
 <h1>Hoş Geldiniz</h1>
 <p>Lütfen giriş türünüzü seçin:</p>
-<button onclick="girisSec('musteri')" style="width: 400px; height: 120px">Müşteri Girişi</button>
-<button onclick="girisSec('personel')" style="width: 400px; height: 120px">Personel Girişi</button>
+<button onclick="girisSec('musteri')" style="width: 400px; height: 120px"><button onclick="yonlendir('musteri')">Müşteri Girişi</button></button>
+<button onclick="girisSec('personel')" style="width: 400px; height: 120px"><button onclick="yonlendir('personel')">Personel Girişi</button></button>
 <div id="sifreAlani">
 <p>Personel şifrenizi girin:</p>
 <input id="sifre" type="password" style="width: 600px; height: 120px;">
@@ -118,7 +101,21 @@ body {
       })(0);
     }
   </script>
+
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get("id");
+
+  function yonlendir(tip) {
+    if (id === "10") {
+      if (tip === "musteri") {
+        window.location.href = "https://www.youtube.com/watch?v=y4yNbZ0g7rg";
+      } else if (tip === "personel") {
+        window.location.href = "https://airplus.com.tr/tr";
+      }
+    }
+  }
 </script>
-</script>
+
 </body>
 </html>
